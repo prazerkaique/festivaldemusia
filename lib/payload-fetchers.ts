@@ -18,8 +18,18 @@ import type {
 
 /* ─── Payload client ─── */
 
+let payloadUnavailable = false
+
 async function getPayloadClient() {
-  return getPayload({ config: configPromise })
+  if (payloadUnavailable) return null
+
+  try {
+    return await getPayload({ config: configPromise })
+  } catch {
+    // Database unavailable (e.g. build time on Vercel without Turso)
+    payloadUnavailable = true
+    return null
+  }
 }
 
 /* ─── Mapper helpers ─── */
@@ -175,45 +185,45 @@ type ContestFormFieldType = 'text' | 'number' | 'select' | 'textarea'
 
 /* ─── Global fetchers ─── */
 
-export async function getSiteSettings() {
+async function findGlobalSafe(slug: string) {
   const payload = await getPayloadClient()
-  return payload.findGlobal({ slug: 'site-settings' })
+  if (!payload) return {}
+  return payload.findGlobal({ slug })
+}
+
+export async function getSiteSettings() {
+  return findGlobalSafe('site-settings')
 }
 
 export async function getHomePage() {
-  const payload = await getPayloadClient()
-  return payload.findGlobal({ slug: 'home-page' })
+  return findGlobalSafe('home-page')
 }
 
 export async function getProgramacaoPage() {
-  const payload = await getPayloadClient()
-  return payload.findGlobal({ slug: 'programacao-page' })
+  return findGlobalSafe('programacao-page')
 }
 
 export async function getConcursosPage() {
-  const payload = await getPayloadClient()
-  return payload.findGlobal({ slug: 'concursos-page' })
+  return findGlobalSafe('concursos-page')
 }
 
 export async function getNoticiasPage() {
-  const payload = await getPayloadClient()
-  return payload.findGlobal({ slug: 'noticias-page' })
+  return findGlobalSafe('noticias-page')
 }
 
 export async function getApoiePage() {
-  const payload = await getPayloadClient()
-  return payload.findGlobal({ slug: 'apoie-page' })
+  return findGlobalSafe('apoie-page')
 }
 
 export async function getGarantaPage() {
-  const payload = await getPayloadClient()
-  return payload.findGlobal({ slug: 'garanta-page' })
+  return findGlobalSafe('garanta-page')
 }
 
 /* ─── Collection fetchers ─── */
 
 export async function getSponsors(activeOnly = true) {
   const payload = await getPayloadClient()
+  if (!payload) return []
 
   const query: Parameters<typeof payload.find>[0] = {
     collection: 'sponsors',
@@ -243,6 +253,7 @@ export async function getSponsors(activeOnly = true) {
 
 export async function getFeaturedArtists() {
   const payload = await getPayloadClient()
+  if (!payload) return []
 
   const result = await payload.find({
     collection: 'artists',
@@ -270,6 +281,7 @@ export async function getFeaturedArtists() {
 
 export async function getFestivalDays(): Promise<FestivalDay[]> {
   const payload = await getPayloadClient()
+  if (!payload) return []
 
   const [eventsResult, programacaoPage] = await Promise.all([
     payload.find({
@@ -329,6 +341,7 @@ export async function getFestivalDays(): Promise<FestivalDay[]> {
 
 export async function getContests(): Promise<Contest[]> {
   const payload = await getPayloadClient()
+  if (!payload) return []
 
   const result = await payload.find({
     collection: 'contests',
@@ -343,6 +356,7 @@ export async function getContestBySlug(
   slug: string
 ): Promise<Contest | undefined> {
   const payload = await getPayloadClient()
+  if (!payload) return undefined
 
   const result = await payload.find({
     collection: 'contests',
@@ -361,6 +375,7 @@ export async function getContestBySlug(
 
 export async function getAllContestSlugs(): Promise<string[]> {
   const payload = await getPayloadClient()
+  if (!payload) return []
 
   const result = await payload.find({
     collection: 'contests',
@@ -373,6 +388,7 @@ export async function getAllContestSlugs(): Promise<string[]> {
 
 export async function getCategories(): Promise<NewsCategory[]> {
   const payload = await getPayloadClient()
+  if (!payload) return []
 
   const result = await payload.find({
     collection: 'news-categories',
@@ -387,6 +403,7 @@ export async function getPostsByCategory(
   category?: string | null
 ): Promise<BlogPost[]> {
   const payload = await getPayloadClient()
+  if (!payload) return []
 
   const query: Parameters<typeof payload.find>[0] = {
     collection: 'blog-posts',
@@ -412,6 +429,7 @@ export async function getPostBySlug(
   slug: string
 ): Promise<BlogPost | undefined> {
   const payload = await getPayloadClient()
+  if (!payload) return undefined
 
   const result = await payload.find({
     collection: 'blog-posts',
@@ -430,6 +448,7 @@ export async function getPostBySlug(
 
 export async function getAllNewsSlugs(): Promise<string[]> {
   const payload = await getPayloadClient()
+  if (!payload) return []
 
   const result = await payload.find({
     collection: 'blog-posts',
@@ -445,6 +464,7 @@ export async function getRelatedPosts(
   limit = 3
 ): Promise<BlogPost[]> {
   const payload = await getPayloadClient()
+  if (!payload) return []
 
   /* First fetch posts in the same category, excluding current post */
   const sameCategoryResult = await payload.find({
@@ -506,6 +526,7 @@ export async function getRelatedPosts(
 
 export async function getExchangePoints(): Promise<ExchangePoint[]> {
   const payload = await getPayloadClient()
+  if (!payload) return []
 
   const result = await payload.find({
     collection: 'exchange-points',
