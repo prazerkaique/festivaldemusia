@@ -43,37 +43,31 @@ function LoginForm() {
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        placeholder="Digite a senha de acesso"
+        placeholder="Senha de acesso"
         autoFocus
         style={{
           width: '100%',
           padding: '14px 20px',
-          fontSize: 16,
-          border: `2px solid ${error ? '#e9530d' : '#404040'}`,
-          borderRadius: 12,
-          background: '#171717',
+          fontSize: 15,
+          border: `1.5px solid ${error ? '#DC2626' : '#2A2A2A'}`,
+          borderRadius: 8,
+          background: '#141414',
           color: '#FFFFFF',
           outline: 'none',
           transition: 'border-color 0.2s',
           boxSizing: 'border-box',
+          letterSpacing: '0.02em',
         }}
         onFocus={(e) => {
-          if (!error) e.currentTarget.style.borderColor = '#a71580'
+          if (!error) e.currentTarget.style.borderColor = '#DC2626'
         }}
         onBlur={(e) => {
-          if (!error) e.currentTarget.style.borderColor = '#404040'
+          if (!error) e.currentTarget.style.borderColor = '#2A2A2A'
         }}
       />
 
       {error && (
-        <p
-          style={{
-            color: '#e9530d',
-            fontSize: 14,
-            marginTop: 8,
-            marginBottom: 0,
-          }}
-        >
+        <p style={{ color: '#DC2626', fontSize: 13, marginTop: 8, marginBottom: 0 }}>
           {error}
         </p>
       )}
@@ -83,19 +77,27 @@ function LoginForm() {
         disabled={loading || !password}
         style={{
           width: '100%',
-          marginTop: 16,
-          padding: '14px 20px',
-          fontSize: 16,
-          fontWeight: 700,
+          marginTop: 14,
+          padding: '13px 20px',
+          fontSize: 14,
+          fontWeight: 600,
+          letterSpacing: '0.04em',
+          textTransform: 'uppercase',
           border: 'none',
-          borderRadius: 12,
-          background: loading || !password ? '#525252' : '#a71580',
+          borderRadius: 8,
+          background: loading || !password ? '#333' : '#DC2626',
           color: '#FFFFFF',
           cursor: loading || !password ? 'not-allowed' : 'pointer',
-          transition: 'background 0.2s',
+          transition: 'background 0.2s, transform 0.1s',
+        }}
+        onMouseEnter={(e) => {
+          if (!loading && password) e.currentTarget.style.background = '#B91C1C'
+        }}
+        onMouseLeave={(e) => {
+          if (!loading && password) e.currentTarget.style.background = '#DC2626'
         }}
       >
-        {loading ? 'Verificando...' : 'Acessar'}
+        {loading ? 'Verificando...' : 'Acessar Projeto'}
       </button>
     </form>
   )
@@ -106,7 +108,7 @@ export default function PreviewLoginPage() {
     <html lang="pt-BR">
       <head>
         <meta name="robots" content="noindex, nofollow" />
-        <title>Preview — Festival de Musica</title>
+        <title>Preview — Nerau</title>
       </head>
       <body
         style={{
@@ -122,37 +124,43 @@ export default function PreviewLoginPage() {
         <div
           style={{
             width: '100%',
-            maxWidth: 400,
+            maxWidth: 360,
             padding: '0 24px',
             textAlign: 'center',
           }}
         >
-          <div style={{ marginBottom: 40 }}>
+          {/* Nerau Logo */}
+          <div style={{ marginBottom: 48 }}>
+            <img
+              src="/assets/nerau-logo-branco.png"
+              alt="Nerau"
+              style={{
+                height: 32,
+                width: 'auto',
+                marginBottom: 24,
+                opacity: 0.9,
+              }}
+            />
             <div
               style={{
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: '#737373',
-                marginBottom: 8,
+                width: 40,
+                height: 1,
+                background: '#2A2A2A',
+                margin: '0 auto 20px',
               }}
-            >
-              Preview
-            </div>
-            <h1
+            />
+            <p
               style={{
-                fontSize: 28,
-                fontWeight: 800,
-                color: '#FFFFFF',
+                fontSize: 13,
+                fontWeight: 500,
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                color: '#555',
                 margin: 0,
-                lineHeight: 1.2,
               }}
             >
-              Festival de Musica
-              <br />
-              <span style={{ color: '#e9530d' }}>de Maringa</span>
-            </h1>
+              Ambiente de Preview
+            </p>
           </div>
 
           <Suspense>
@@ -161,12 +169,13 @@ export default function PreviewLoginPage() {
 
           <p
             style={{
-              marginTop: 32,
-              fontSize: 12,
-              color: '#525252',
+              marginTop: 40,
+              fontSize: 11,
+              color: '#333',
+              letterSpacing: '0.05em',
             }}
           >
-            Ambiente de preview — acesso restrito
+            nerau.com.br
           </p>
         </div>
       </body>
