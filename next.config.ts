@@ -3,8 +3,6 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   images: {
-    loader: 'custom',
-    loaderFile: './lib/image-loader.ts',
     formats: ['image/avif', 'image/webp'],
   },
   async headers() {
