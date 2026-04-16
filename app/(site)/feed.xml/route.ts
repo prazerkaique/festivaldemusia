@@ -1,31 +1,23 @@
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
 import { getBaseUrl } from '@/lib/seo'
+import { getPostsByCategory } from '@/lib/payload-fetchers'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const baseUrl = getBaseUrl()
-  const payload = await getPayload({ config: configPromise })
-
-  const result = await payload.find({
-    collection: 'blog-posts',
-    limit: 50,
-    depth: 1,
-    sort: '-date',
-  })
-
-  const posts = result.docs
+  const posts = await getPostsByCategory()
 
   const items = posts
-    .map((post: any) => {
-      const title = escapeXml(post.title ?? '')
-      const slug = post.slug ?? ''
-      const excerpt = escapeXml(post.excerpt ?? '')
+    .slice(0, 50)
+    .map((post) => {
+      const title = escapeXml(post.title)
+      const link = `${baseUrl}/noticias/${post.slug}`
+      const excerpt = escapeXml(post.excerpt)
       const date = post.date ? new Date(post.date).toUTCString() : ''
-      const link = `${baseUrl}/noticias/${slug}`
-      const image = post.coverImage?.url
-        ? post.coverImage.url.startsWith('http')
-          ? post.coverImage.url
-          : `${baseUrl}${post.coverImage.url}`
+      const image = post.thumbnail
+        ? post.thumbnail.startsWith('http')
+          ? post.thumbnail
+          : `${baseUrl}${post.thumbnail}`
         : ''
 
       return `    <item>

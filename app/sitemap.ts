@@ -1,11 +1,9 @@
 import type { MetadataRoute } from 'next'
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
 import { getBaseUrl } from '@/lib/seo'
+import { getAllNewsSlugs, getAllContestSlugs } from '@/lib/payload-fetchers'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = getBaseUrl()
-  const payload = await getPayload({ config: configPromise })
 
   /* ─── Static routes ─── */
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -18,31 +16,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   /* ─── Dynamic: blog posts ─── */
-  const postsResult = await payload.find({
-    collection: 'blog-posts',
-    limit: 500,
-    depth: 0,
-    select: { slug: true, updatedAt: true },
-  })
-
-  const postRoutes: MetadataRoute.Sitemap = postsResult.docs.map((doc: any) => ({
-    url: `${baseUrl}/noticias/${doc.slug}`,
-    lastModified: doc.updatedAt ? new Date(doc.updatedAt) : new Date(),
+  const postSlugs = await getAllNewsSlugs()
+  const postRoutes: MetadataRoute.Sitemap = postSlugs.map((slug) => ({
+    url: `${baseUrl}/noticias/${slug}`,
+    lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.6,
   }))
 
   /* ─── Dynamic: contests ─── */
-  const contestsResult = await payload.find({
-    collection: 'contests',
-    limit: 100,
-    depth: 0,
-    select: { slug: true, updatedAt: true },
-  })
-
-  const contestRoutes: MetadataRoute.Sitemap = contestsResult.docs.map((doc: any) => ({
-    url: `${baseUrl}/concursos/${doc.slug}`,
-    lastModified: doc.updatedAt ? new Date(doc.updatedAt) : new Date(),
+  const contestSlugs = await getAllContestSlugs()
+  const contestRoutes: MetadataRoute.Sitemap = contestSlugs.map((slug) => ({
+    url: `${baseUrl}/concursos/${slug}`,
+    lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.6,
   }))
