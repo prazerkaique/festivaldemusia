@@ -1,7 +1,6 @@
-/* ─── Payload CMS Data Layer ─── */
-/* Replaces the mock-* fetchers with Payload Local API calls.
-   All functions export the same signatures and return the same
-   types defined in lib/types.ts so UI components are unaffected. */
+/* ─── Payload CMS Data Layer with Mock Fallbacks ─── */
+/* When Payload is unavailable (e.g. Vercel without Turso),
+   all fetchers fall back to mock data so the site renders fully. */
 
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
@@ -16,6 +15,25 @@ import type {
   ExchangePoint,
 } from './types'
 
+/* ─── Mock data imports ─── */
+import {
+  getFestivalDays as getMockFestivalDays,
+} from './mock-schedule'
+import {
+  CONTESTS as MOCK_CONTESTS,
+  getContestBySlug as getMockContestBySlug,
+  getAllContestSlugs as getMockContestSlugs,
+} from './mock-contests'
+import {
+  NEWS_CATEGORIES as MOCK_CATEGORIES,
+  POSTS as MOCK_POSTS,
+  getPostsByCategory as getMockPostsByCategory,
+  getPostBySlug as getMockPostBySlug,
+  getAllNewsSlugs as getMockNewsSlugs,
+  getRelatedPosts as getMockRelatedPosts,
+} from './mock-news'
+import { EXCHANGE_POINTS as MOCK_EXCHANGE_POINTS } from './mock-exchange-points'
+
 /* ─── Payload client ─── */
 
 let payloadUnavailable = false
@@ -26,7 +44,6 @@ async function getPayloadClient() {
   try {
     return await getPayload({ config: configPromise })
   } catch {
-    // Database unavailable (e.g. build time on Vercel without Turso)
     payloadUnavailable = true
     return null
   }
@@ -219,7 +236,7 @@ export async function getGarantaPage() {
   return findGlobalSafe('garanta-page')
 }
 
-/* ─── Collection fetchers ─── */
+/* ─── Collection fetchers (with mock fallbacks) ─── */
 
 export async function getSponsors(activeOnly = true) {
   const payload = await getPayloadClient()
@@ -281,7 +298,7 @@ export async function getFeaturedArtists() {
 
 export async function getFestivalDays(): Promise<FestivalDay[]> {
   const payload = await getPayloadClient()
-  if (!payload) return []
+  if (!payload) return getMockFestivalDays()
 
   const [eventsResult, programacaoPage] = await Promise.all([
     payload.find({
@@ -301,7 +318,6 @@ export async function getFestivalDays(): Promise<FestivalDay[]> {
     dayMap.set(ev.date, existing)
   }
 
-  /* Use festivalDays from global if available, else fallback to hardcoded */
   const daysConfig = (programacaoPage as any).festivalDays
   if (daysConfig && Array.isArray(daysConfig) && daysConfig.length > 0) {
     return daysConfig.map((d: any) => ({
@@ -316,7 +332,6 @@ export async function getFestivalDays(): Promise<FestivalDay[]> {
     }))
   }
 
-  /* Fallback: hardcoded schedule */
   const SCHEDULE_FALLBACK: [string, string, string, number][] = [
     ['2026-10-13', 'Seg', 'Segunda-feira', 13],
     ['2026-10-14', 'Ter', 'Terça-feira', 14],
@@ -341,7 +356,7 @@ export async function getFestivalDays(): Promise<FestivalDay[]> {
 
 export async function getContests(): Promise<Contest[]> {
   const payload = await getPayloadClient()
-  if (!payload) return []
+  if (!payload) return MOCK_CONTESTS
 
   const result = await payload.find({
     collection: 'contests',
@@ -356,17 +371,13 @@ export async function getContestBySlug(
   slug: string
 ): Promise<Contest | undefined> {
   const payload = await getPayloadClient()
-  if (!payload) return undefined
+  if (!payload) return getMockContestBySlug(slug)
 
   const result = await payload.find({
     collection: 'contests',
     limit: 1,
     depth: 1,
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
+    where: { slug: { equals: slug } },
   })
 
   const doc = result.docs[0]
@@ -375,7 +386,7 @@ export async function getContestBySlug(
 
 export async function getAllContestSlugs(): Promise<string[]> {
   const payload = await getPayloadClient()
-  if (!payload) return []
+  if (!payload) return getMockContestSlugs()
 
   const result = await payload.find({
     collection: 'contests',
@@ -388,7 +399,7 @@ export async function getAllContestSlugs(): Promise<string[]> {
 
 export async function getCategories(): Promise<NewsCategory[]> {
   const payload = await getPayloadClient()
-  if (!payload) return []
+  if (!payload) return MOCK_CATEGORIES
 
   const result = await payload.find({
     collection: 'news-categories',
@@ -403,7 +414,7 @@ export async function getPostsByCategory(
   category?: string | null
 ): Promise<BlogPost[]> {
   const payload = await getPayloadClient()
-  if (!payload) return []
+  if (!payload) return getMockPostsByCategory(category ?? null)
 
   const query: Parameters<typeof payload.find>[0] = {
     collection: 'blog-posts',
@@ -413,15 +424,10 @@ export async function getPostsByCategory(
   }
 
   if (category) {
-    query.where = {
-      'category.slug': {
-        equals: category,
-      },
-    }
+    query.where = { 'category.slug': { equals: category } }
   }
 
   const result = await payload.find(query)
-
   return result.docs.map(mapPost)
 }
 
@@ -429,17 +435,13 @@ export async function getPostBySlug(
   slug: string
 ): Promise<BlogPost | undefined> {
   const payload = await getPayloadClient()
-  if (!payload) return undefined
+  if (!payload) return getMockPostBySlug(slug)
 
   const result = await payload.find({
     collection: 'blog-posts',
     limit: 1,
     depth: 1,
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
+    where: { slug: { equals: slug } },
   })
 
   const doc = result.docs[0]
@@ -448,7 +450,7 @@ export async function getPostBySlug(
 
 export async function getAllNewsSlugs(): Promise<string[]> {
   const payload = await getPayloadClient()
-  if (!payload) return []
+  if (!payload) return getMockNewsSlugs()
 
   const result = await payload.find({
     collection: 'blog-posts',
@@ -464,26 +466,17 @@ export async function getRelatedPosts(
   limit = 3
 ): Promise<BlogPost[]> {
   const payload = await getPayloadClient()
-  if (!payload) return []
+  if (!payload) return getMockRelatedPosts(post, limit)
 
-  /* First fetch posts in the same category, excluding current post */
   const sameCategoryResult = await payload.find({
     collection: 'blog-posts',
-    limit: limit + 1, // fetch one extra in case we need to skip current
+    limit: limit + 1,
     depth: 1,
     sort: '-date',
     where: {
       and: [
-        {
-          'category.slug': {
-            equals: post.category.slug,
-          },
-        },
-        {
-          slug: {
-            not_equals: post.slug,
-          },
-        },
+        { 'category.slug': { equals: post.category.slug } },
+        { slug: { not_equals: post.slug } },
       ],
     },
   })
@@ -494,39 +487,29 @@ export async function getRelatedPosts(
     return sameCategoryPosts
   }
 
-  /* Fill remaining slots with posts from other categories */
   const needed = limit - sameCategoryPosts.length
   const excludedSlugs = [post.slug, ...sameCategoryPosts.map((p) => p.slug)]
 
   const othersResult = await payload.find({
     collection: 'blog-posts',
-    limit: needed + excludedSlugs.length, // fetch with buffer
+    limit: needed + excludedSlugs.length,
     depth: 1,
     sort: '-date',
     where: {
       and: [
-        {
-          'category.slug': {
-            not_equals: post.category.slug,
-          },
-        },
-        {
-          slug: {
-            not_in: excludedSlugs,
-          },
-        },
+        { 'category.slug': { not_equals: post.category.slug } },
+        { slug: { not_in: excludedSlugs } },
       ],
     },
   })
 
   const otherPosts = othersResult.docs.map(mapPost).slice(0, needed)
-
   return [...sameCategoryPosts, ...otherPosts]
 }
 
 export async function getExchangePoints(): Promise<ExchangePoint[]> {
   const payload = await getPayloadClient()
-  if (!payload) return []
+  if (!payload) return MOCK_EXCHANGE_POINTS
 
   const result = await payload.find({
     collection: 'exchange-points',
