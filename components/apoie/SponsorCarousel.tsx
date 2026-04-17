@@ -11,6 +11,7 @@ interface SponsorItem {
 
 const FALLBACK_SPONSORS: SponsorItem[] = [
   { name: 'Lei de Incentivo à Cultura', logo: { url: '/assets/sponsors/lei-rouanet.png', width: 808, height: 516 } },
+  { name: 'Governo do Paraná', logo: { url: '/assets/sponsors/governo-parana.png', width: 2850, height: 835 } },
   { name: 'Prefeitura de Maringá', logo: { url: '/assets/sponsors/prefeitura-maringa.png', width: 352, height: 408 } },
   { name: 'Grupo Maringá de Comunicação', logo: { url: '/assets/sponsors/gmc.png', width: 616, height: 375 } },
   { name: 'Universidade Estadual de Maringá', logo: { url: '/assets/sponsors/uem.png', width: 3291, height: 1588 } },
@@ -44,7 +45,7 @@ export default function SponsorCarousel({
       return
     }
 
-    scrollPos.current += 0.5
+    scrollPos.current += 2.2
     const el = scrollRef.current
     const halfWidth = el.scrollWidth / 2
 
@@ -74,22 +75,22 @@ export default function SponsorCarousel({
 
       <div
         ref={scrollRef}
-        className="flex items-center gap-12 sm:gap-16 lg:gap-20 overflow-hidden"
+        className="flex items-center gap-10 sm:gap-14 lg:gap-16 overflow-hidden"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
         {loopItems.map((sponsor, i) => (
           <div
             key={`${sponsor.name}-${i}`}
-            className="shrink-0 flex items-center justify-center h-8 sm:h-10 lg:h-12 px-4"
+            className="shrink-0 flex items-center justify-center h-16 w-32 sm:h-20 sm:w-40 lg:h-24 lg:w-48"
           >
             <Image
               src={sponsor.logo.url}
               alt={sponsor.name}
               width={sponsor.logo.width || 200}
               height={sponsor.logo.height || 100}
-              className="h-full w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-              sizes="150px"
+              className="max-h-full max-w-full w-auto h-auto object-contain transition-transform duration-300 hover:scale-105"
+              sizes="200px"
             />
           </div>
         ))}

@@ -12,7 +12,6 @@ export default function VideoParallax() {
     if (!video) return
 
     const update = () => {
-      // Find the parent section (the 250vh container)
       const section = video.closest('section')
       if (!section) return
 

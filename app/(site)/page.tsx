@@ -203,6 +203,81 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* ═══════════ LOCATION — MOBILE (parallax + content) ═══════════ */}
+      <section id="local" className="lg:hidden bg-white relative">
+        <VideoParallaxMobile />
+      </section>
+
+      {/* ═══════════ LOCATION + PARALLAX — DESKTOP ═══════════ */}
+      <section className="hidden lg:block bg-white relative" style={{ height: '250vh' }}>
+        <div className="sticky top-[120px] h-[calc(100vh-120px)] flex items-center overflow-hidden">
+          <div className="container-site px-4 sm:px-6 lg:px-8 w-full">
+            <div className="grid grid-cols-2 gap-16 items-center">
+              {/* Text — left */}
+              <ScrollReveal direction="left">
+              <div>
+                <span className="inline-block bg-purple text-white font-bold uppercase tracking-[0.25em] text-sm px-4 py-1.5 rounded-full mb-6">
+                  {locationBadge}
+                </span>
+                <h2 className="text-6xl lg:text-7xl font-bold text-gray-900 uppercase font-[family-name:var(--font-heading)] leading-[0.95] mb-6">
+                  {locationHeading}
+                  <br />
+                  <span className="text-purple">{locationHeadingAccent}</span>
+                </h2>
+                <p className="text-gray-600 text-lg leading-relaxed max-w-lg mb-8">
+                  {locationDescription}
+                </p>
+
+                {/* Info pills */}
+                <div className="flex flex-wrap gap-3 mb-8">
+                  <span className="inline-flex items-center gap-2 bg-purple/10 border border-purple/20 text-gray-900 px-4 py-2 rounded-full text-sm font-medium">
+                    <svg className="w-4 h-4 text-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    {festivalLocation}
+                  </span>
+                  <span className="inline-flex items-center gap-2 bg-purple/10 border border-purple/20 text-gray-900 px-4 py-2 rounded-full text-sm font-medium">
+                    <svg className="w-4 h-4 text-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    {festivalDates}
+                  </span>
+                  <span className="inline-flex items-center gap-2 bg-purple/10 border border-purple/20 text-gray-900 px-4 py-2 rounded-full text-sm font-medium">
+                    <svg className="w-4 h-4 text-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    {phone}
+                  </span>
+                </div>
+
+                {/* CTAs */}
+                <div className="flex gap-4">
+                  <ColorBadgeLink
+                    href="/programacao"
+                    className="inline-flex items-center justify-center gap-3 bg-purple text-white px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider hover:scale-105"
+                  >
+                    Ver Programação
+                    <ArrowIcon />
+                  </ColorBadgeLink>
+                  <ColorBadgeLink
+                    href="/garanta-sua-vaga"
+                    className="inline-flex items-center justify-center gap-3 border-2 border-gray-900 text-gray-900 px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider hover:scale-105"
+                  >
+                    Garanta sua Vaga
+                    <ArrowIcon />
+                  </ColorBadgeLink>
+                </div>
+              </div>
+              </ScrollReveal>
+
+              {/* Parallax video — right */}
+              <VideoParallax />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ═══════════ STATS BAR ═══════════ */}
       <section className="bg-white pt-16 sm:pt-20 lg:pt-24 pb-10 sm:pb-12 relative">
         <div className="container-site px-4 sm:px-6 lg:px-8">
@@ -497,81 +572,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ═══════════ LOCATION — MOBILE (parallax + content) ═══════════ */}
-      <section id="local" className="lg:hidden bg-white relative">
-        <VideoParallaxMobile />
-      </section>
-
-      {/* ═══════════ LOCATION + PARALLAX — DESKTOP ═══════════ */}
-      <section className="hidden lg:block bg-white relative" style={{ height: '250vh' }}>
-        <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-          <div className="container-site px-4 sm:px-6 lg:px-8 w-full">
-            <div className="grid grid-cols-2 gap-16 items-center">
-              {/* Text — left */}
-              <ScrollReveal direction="left">
-              <div>
-                <span className="inline-block bg-purple text-white font-bold uppercase tracking-[0.25em] text-sm px-4 py-1.5 rounded-full mb-6">
-                  {locationBadge}
-                </span>
-                <h2 className="text-6xl lg:text-7xl font-bold text-gray-900 uppercase font-[family-name:var(--font-heading)] leading-[0.95] mb-6">
-                  {locationHeading}
-                  <br />
-                  <span className="text-purple">{locationHeadingAccent}</span>
-                </h2>
-                <p className="text-gray-600 text-lg leading-relaxed max-w-lg mb-8">
-                  {locationDescription}
-                </p>
-
-                {/* Info pills */}
-                <div className="flex flex-wrap gap-3 mb-8">
-                  <span className="inline-flex items-center gap-2 bg-purple/10 border border-purple/20 text-gray-900 px-4 py-2 rounded-full text-sm font-medium">
-                    <svg className="w-4 h-4 text-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    {festivalLocation}
-                  </span>
-                  <span className="inline-flex items-center gap-2 bg-purple/10 border border-purple/20 text-gray-900 px-4 py-2 rounded-full text-sm font-medium">
-                    <svg className="w-4 h-4 text-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    {festivalDates}
-                  </span>
-                  <span className="inline-flex items-center gap-2 bg-purple/10 border border-purple/20 text-gray-900 px-4 py-2 rounded-full text-sm font-medium">
-                    <svg className="w-4 h-4 text-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    {phone}
-                  </span>
-                </div>
-
-                {/* CTAs */}
-                <div className="flex gap-4">
-                  <ColorBadgeLink
-                    href="/programacao"
-                    className="inline-flex items-center justify-center gap-3 bg-purple text-white px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider hover:scale-105"
-                  >
-                    Ver Programação
-                    <ArrowIcon />
-                  </ColorBadgeLink>
-                  <ColorBadgeLink
-                    href="/garanta-sua-vaga"
-                    className="inline-flex items-center justify-center gap-3 border-2 border-gray-900 text-gray-900 px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider hover:scale-105"
-                  >
-                    Garanta sua Vaga
-                    <ArrowIcon />
-                  </ColorBadgeLink>
-                </div>
-              </div>
-              </ScrollReveal>
-
-              {/* Parallax video — right */}
-              <VideoParallax />
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ═══════════ SPONSORS ═══════════ */}
       <section className="bg-white border-t border-gray-900 py-10 sm:py-24 lg:py-28">
         <div className="container-site px-4 sm:px-6 lg:px-8">
@@ -583,20 +583,26 @@ export default async function Home() {
             <>
               {/* Mobile — auto-scrolling carousel */}
               <div className="sm:hidden overflow-hidden">
-                <div className="animate-marquee-sponsors inline-flex items-center gap-10">
+                <div className="animate-marquee-sponsors inline-flex items-center gap-8">
                   {[...sponsors, ...sponsors].map((sp, i) => (
-                    <Image key={`${sp.id}-${i}`} src={sp.logo.url} alt={i >= sponsors.length ? '' : sp.name} width={sp.logo.width || 200} height={sp.logo.height || 100} className="h-14 w-auto shrink-0" aria-hidden={i >= sponsors.length} sizes="150px" />
+                    <div key={`${sp.id}-${i}`} className="shrink-0 flex items-center justify-center h-20 w-36" aria-hidden={i >= sponsors.length}>
+                      <Image src={sp.logo.url} alt={i >= sponsors.length ? '' : sp.name} width={sp.logo.width || 200} height={sp.logo.height || 100} className="max-h-full max-w-full w-auto h-auto object-contain" sizes="150px" />
+                    </div>
                   ))}
                 </div>
               </div>
               {/* Desktop — static layout */}
-              <div className="hidden sm:flex flex-col items-center gap-8">
+              <div className="hidden sm:flex flex-col items-center gap-10">
                 {sponsors.filter(sp => sp.tier === 'master').map(sp => (
-                  <Image key={sp.id} src={sp.logo.url} alt={sp.name} width={sp.logo.width || 200} height={sp.logo.height || 100} className="h-32 lg:h-40 w-auto" sizes="300px" />
+                  <div key={sp.id} className="flex items-center justify-center h-40 lg:h-52 w-auto">
+                    <Image src={sp.logo.url} alt={sp.name} width={sp.logo.width || 200} height={sp.logo.height || 100} className="max-h-full w-auto h-auto object-contain" sizes="400px" />
+                  </div>
                 ))}
-                <div className="flex flex-wrap items-center justify-center gap-8">
+                <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-10">
                   {sponsors.filter(sp => sp.tier !== 'master').map(sp => (
-                    <Image key={sp.id} src={sp.logo.url} alt={sp.name} width={sp.logo.width || 200} height={sp.logo.height || 100} className="h-20 w-auto" sizes="200px" />
+                    <div key={sp.id} className="flex items-center justify-center h-24 lg:h-28 w-44 lg:w-52">
+                      <Image src={sp.logo.url} alt={sp.name} width={sp.logo.width || 200} height={sp.logo.height || 100} className="max-h-full max-w-full w-auto h-auto object-contain" sizes="250px" />
+                    </div>
                   ))}
                 </div>
               </div>
@@ -604,30 +610,45 @@ export default async function Home() {
           ) : (
             <>
               {/* Fallback — hardcoded sponsors */}
-              <div className="sm:hidden overflow-hidden">
-                <div className="animate-marquee-sponsors inline-flex items-center gap-10">
-                  <Image src="/assets/sponsors/lei-rouanet.png" alt="Lei de Incentivo à Cultura" width={808} height={516} className="h-16 w-auto shrink-0" sizes="150px" />
-                  <Image src="/assets/sponsors/prefeitura-maringa.png" alt="Prefeitura de Maringá" width={352} height={408} className="h-14 w-auto shrink-0" sizes="150px" />
-                  <Image src="/assets/sponsors/gmc.png" alt="Grupo Maringá de Comunicação" width={616} height={375} className="h-11 w-auto shrink-0" sizes="150px" />
-                  <Image src="/assets/sponsors/uem.png" alt="Universidade Estadual de Maringá" width={3291} height={1588} className="h-11 w-auto shrink-0" sizes="150px" />
-                  <Image src="/assets/sponsors/luzamor.png" alt="Teatro Luzamor" width={240} height={240} className="h-14 w-auto shrink-0" sizes="150px" />
-                  <Image src="/assets/sponsors/nerau.png" alt="Nerau CX" width={1822} height={500} className="h-11 w-auto shrink-0" sizes="150px" />
-                  <Image src="/assets/sponsors/lei-rouanet.png" alt="" width={808} height={516} className="h-16 w-auto shrink-0" aria-hidden="true" sizes="150px" />
-                  <Image src="/assets/sponsors/prefeitura-maringa.png" alt="" width={352} height={408} className="h-14 w-auto shrink-0" aria-hidden="true" sizes="150px" />
-                  <Image src="/assets/sponsors/gmc.png" alt="" width={616} height={375} className="h-11 w-auto shrink-0" aria-hidden="true" sizes="150px" />
-                  <Image src="/assets/sponsors/uem.png" alt="" width={3291} height={1588} className="h-11 w-auto shrink-0" aria-hidden="true" sizes="150px" />
-                  <Image src="/assets/sponsors/luzamor.png" alt="" width={240} height={240} className="h-14 w-auto shrink-0" aria-hidden="true" sizes="150px" />
-                  <Image src="/assets/sponsors/nerau.png" alt="" width={1822} height={500} className="h-11 w-auto shrink-0" aria-hidden="true" sizes="150px" />
+              {(() => {
+                const fallbackLogos = [
+                  { src: '/assets/sponsors/lei-rouanet.png', alt: 'Lei de Incentivo à Cultura', w: 808, h: 516 },
+                  { src: '/assets/sponsors/governo-parana.png', alt: 'Governo do Paraná', w: 2850, h: 835 },
+                  { src: '/assets/sponsors/prefeitura-maringa.png', alt: 'Prefeitura de Maringá', w: 352, h: 408 },
+                  { src: '/assets/sponsors/gmc.png', alt: 'Grupo Maringá de Comunicação', w: 616, h: 375 },
+                  { src: '/assets/sponsors/uem.png', alt: 'Universidade Estadual de Maringá', w: 3291, h: 1588 },
+                  { src: '/assets/sponsors/luzamor.png', alt: 'Teatro Luzamor', w: 240, h: 240 },
+                  { src: '/assets/sponsors/nerau.png', alt: 'Nerau CX', w: 1822, h: 500 },
+                ]
+                return (
+                  <div className="sm:hidden overflow-hidden">
+                    <div className="animate-marquee-sponsors inline-flex items-center gap-8">
+                      {[...fallbackLogos, ...fallbackLogos].map((s, i) => (
+                        <div key={`${s.src}-${i}`} className="shrink-0 flex items-center justify-center h-20 w-36" aria-hidden={i >= fallbackLogos.length}>
+                          <Image src={s.src} alt={i >= fallbackLogos.length ? '' : s.alt} width={s.w} height={s.h} className="max-h-full max-w-full w-auto h-auto object-contain" sizes="150px" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )
+              })()}
+              <div className="hidden sm:flex flex-col items-center gap-10">
+                <div className="flex items-center justify-center h-40 lg:h-52">
+                  <Image src="/assets/sponsors/lei-rouanet.png" alt="Lei de Incentivo à Cultura" width={808} height={516} className="max-h-full w-auto h-auto object-contain" sizes="400px" />
                 </div>
-              </div>
-              <div className="hidden sm:flex flex-col items-center gap-8">
-                <Image src="/assets/sponsors/lei-rouanet.png" alt="Lei de Incentivo à Cultura" width={808} height={516} className="h-32 lg:h-40 w-auto" sizes="300px" />
-                <div className="flex flex-wrap items-center justify-center gap-10">
-                  <Image src="/assets/sponsors/prefeitura-maringa.png" alt="Prefeitura de Maringá" width={352} height={408} className="h-[5.5rem] w-auto" sizes="200px" />
-                  <Image src="/assets/sponsors/gmc.png" alt="Grupo Maringá de Comunicação" width={616} height={375} className="h-20 w-auto" sizes="200px" />
-                  <Image src="/assets/sponsors/uem.png" alt="Universidade Estadual de Maringá" width={3291} height={1588} className="h-20 w-auto" sizes="200px" />
-                  <Image src="/assets/sponsors/luzamor.png" alt="Teatro Luzamor" width={240} height={240} className="h-[5.5rem] w-auto" sizes="200px" />
-                  <Image src="/assets/sponsors/nerau.png" alt="Nerau CX" width={1822} height={500} className="h-16 w-auto" sizes="200px" />
+                <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-10">
+                  {[
+                    { src: '/assets/sponsors/governo-parana.png', alt: 'Governo do Paraná', w: 2850, h: 835 },
+                    { src: '/assets/sponsors/prefeitura-maringa.png', alt: 'Prefeitura de Maringá', w: 352, h: 408 },
+                    { src: '/assets/sponsors/gmc.png', alt: 'Grupo Maringá de Comunicação', w: 616, h: 375 },
+                    { src: '/assets/sponsors/uem.png', alt: 'Universidade Estadual de Maringá', w: 3291, h: 1588 },
+                    { src: '/assets/sponsors/luzamor.png', alt: 'Teatro Luzamor', w: 240, h: 240 },
+                    { src: '/assets/sponsors/nerau.png', alt: 'Nerau CX', w: 1822, h: 500 },
+                  ].map((s) => (
+                    <div key={s.src} className="flex items-center justify-center h-24 lg:h-28 w-44 lg:w-52">
+                      <Image src={s.src} alt={s.alt} width={s.w} height={s.h} className="max-h-full max-w-full w-auto h-auto object-contain" sizes="250px" />
+                    </div>
+                  ))}
                 </div>
               </div>
             </>

@@ -24,6 +24,7 @@ const NAV_LINKS: NavLink[] = [
     ],
   },
   { label: 'Apoie', href: '/apoie' },
+  { label: 'Incentive', href: '/incentive-a-cultura' },
   { label: 'Notícias', href: '/noticias' },
 ]
 
